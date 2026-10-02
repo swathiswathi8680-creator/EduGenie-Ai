@@ -2,5 +2,3 @@ fastapi
 uvicorn
 google-generativeai
 jinja2
-transformers
-torch

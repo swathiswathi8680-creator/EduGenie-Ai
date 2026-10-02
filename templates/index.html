@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>EduGenie - AI Learning Assistant</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <header>
+            <h1>🎓 EduGenie</h1>
+            <p>Google Gemini Powered Learning Assistant</p>
+        </header>
+
+        <main>
+
+            <div class="welcome-card">
+                <h2>Welcome to EduGenie 👋</h2>
+
+                <p>
+                    Your AI-powered learning assistant for
+                    studying, understanding concepts and preparing for exams.
+                </p>
+            </div>
+
+            <div class="chat-box">
+
+                <div id="chatMessages" class="chat-messages">
+
+                    <div class="message bot">
+                        <strong>EduGenie:</strong>
+                        Hello! 👋 How can I help you with your studies?
+                    </div>
+
+                </div>
+
+                <div class="input-area">
+
+                    <input
+                        type="text"
+                        id="userInput"
+                        placeholder="Ask your question..."
+                        autocomplete="off"
+                    >
+
+                    <button onclick="sendMessage()">
+                        Send
+                    </button>
+
+                </div>
+
+            </div>
+
+        </main>
+
+        <footer>
+            <p>© 2026 EduGenie | AI Learning Assistant</p>
+        </footer>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>

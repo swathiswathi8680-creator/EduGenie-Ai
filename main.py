@@ -7,7 +7,7 @@ import google.generativeai as genai
 from qna import answer_question_with_gemini
 from explanation_module import explain_topic
 from summary_module import summarize_text
-from quiz_module import generate_quiz
+from quiz_module import generate_quiz 
 from learning_path import get_learning_recommendations
 
 app = FastAPI()

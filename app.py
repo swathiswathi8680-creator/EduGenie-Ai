@@ -24,7 +24,7 @@ def chat():
             return jsonify({'response': 'Please enter a valid question.'}), 400
 
         # Using the supported model name
-        model = genai.GenerativeModel('gemini-2.5-flash')
+        model = genai.GenerativeModel('gemini-3.8-flash')
         response = model.generate_content(user_message)
 
         return jsonify({'response': response.text})

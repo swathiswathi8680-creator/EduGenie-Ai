@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduGenie - AI Learning Assistant</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to EduGenie 🧠✨</h1>
+        <p class="subtitle">Your personal AI tutor for learning support!</p>
+
+        <!-- Q&A -->
+        <div class="card">
+            <h3>Ask EduGenie a Question:</h3>
+            <form id="qaForm">
+                <input type="text" id="question" placeholder="Why is the sky blue?" required>
+                <button type="submit">Get Answer</button>
+            </form>
+            <div id="qaResult" class="output"></div>
+        </div>
+
+        <!-- Explanation -->
+        <div class="card">
+            <h3>Need an Explanation?</h3>
+            <form id="explainForm">
+                <input type="text" id="topic" placeholder="Photosynthesis" required>
+                <button type="submit">Explain</button>
+            </form>
+            <div id="explanationResult" class="output"></div>
+        </div>
+
+        <!-- Summary -->
+        <div class="card">
+            <h3>Summarize a Paragraph:</h3>
+            <form id="summaryForm">
+                <textarea id="summaryText" placeholder="Paste long content to summarize" required></textarea>
+                <button type="submit">Summarize</button>
+            </form>
+            <div id="summaryResult" class="output"></div>
+        </div>
+
+        <!-- Quiz -->
+        <div class="card">
+            <h3>Generate a Quiz:</h3>
+            <form id="quizForm">
+                <input type="text" id="quizText" placeholder="Solar System" required>
+                <button type="submit">Generate Quiz</button>
+            </form>
+            <div id="quizResult" class="output"></div>
+        </div>
+
+        <!-- Learning Path -->
+        <div class="card">
+            <h3>Get Learning Recommendations:</h3>
+            <form id="recommendForm">
+                <input type="text" id="recommendTopic" placeholder="e.g. Linear Regression" required>
+                <button type="submit">Get Recommendations</button>
+            </form>
+            <div id="recommendResult" class="output"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('qaForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const q = document.getElementById('question').value;
+            const res = await fetch(`/qa?question=${encodeURIComponent(q)}`);
+            const data = await res.json();
+            document.getElementById('qaResult').innerText = data.answer;
+        });
+
+        document.getElementById('explainForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const topic = document.getElementById('topic').value;
+            const res = await fetch('/explain/', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({topic})
+            });
+            const data = await res.json();
+            document.getElementById('explanationResult').innerText = data.explanation;
+        });
+
+        document.getElementById('summaryForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const text = document.getElementById('summaryText').value;
+            const res = await fetch('/summarize/', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({text})
+            });
+            const data = await res.json();
+            document.getElementById('summaryResult').innerText = data.summary;
+        });
+
+        document.getElementById('quizForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const text = document.getElementById('quizText').value;
+            const res = await fetch('/quiz', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({text})
+            });
+            const data = await res.json();
+            document.getElementById('quizResult').innerText = JSON.stringify(data.quiz, null, 2);
+        });
+
+        document.getElementById('recommendForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const topic = document.getElementById('recommendTopic').value;
+            const res = await fetch(`/learn/recommendations?topic=${encodeURIComponent(topic)}`);
+            const data = await res.json();
+            document.getElementById('recommendResult').innerText = data.recommendation;
+        });
+    </script>
+</body>
+</html>

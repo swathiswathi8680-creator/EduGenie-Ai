@@ -11,8 +11,8 @@ st.set_page_config(
 # -----------------------------
 # ADMIN LOGIN DETAILS
 # -----------------------------
-ADMIN_USERNAME = "admin"
-ADMIN_PASSWORD = "admin123"
+ADMIN_USERNAME = "your username"
+ADMIN_PASSWORD = "your password"
 ADMIN_NAME = "Swathi"
 
 # -----------------------------

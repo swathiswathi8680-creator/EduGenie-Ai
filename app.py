@@ -1,37 +1,55 @@
-import os
+import streamlit as st
 import google.generativeai as genai
-from flask import Flask, render_template, request, jsonify
+import os
 
-app = Flask(__name__)
+st.set_page_config(
+    page_title="SmartLearn AI",
+    page_icon="🎓",
+    layout="wide"
+)
 
-# Fetch the API key from Render Environment Variables
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+st.title("🎓 SmartLearn AI")
+st.subheader("Your Personal AI Learning Assistant")
 
-if GEMINI_API_KEY:
-    genai.configure(api_key=GEMINI_API_KEY)
+api_key = os.getenv("GEMINI_API_KEY")
 
-@app.route('/')
-def home():
-    return render_template('index.html')
+if not api_key:
+    st.warning("⚠️ Gemini API key is not configured.")
+    st.info("API key will be added securely in Render Environment Variables.")
+    st.stop()
 
-@app.route('/api/chat', methods=['POST'])
-def chat():
-    try:
-        data = request.get_json()
-        user_message = data.get('message', '')
+genai.configure(api_key=api_key)
 
-        if not user_message:
-            return jsonify({'response': 'Please enter a valid question.'}), 400
+model = genai.GenerativeModel("gemini-1.5-flash")
 
-        # Using the supported model name
-        model = genai.GenerativeModel('gemini-3.8-flash')
-        response = model.generate_content(user_message)
+st.markdown("### 💬 Ask SmartLearn AI")
 
-        return jsonify({'response': response.text})
+question = st.text_area(
+    "Enter your question:",
+    placeholder="Example: Explain Artificial Intelligence in simple words..."
+)
 
-    except Exception as e:
-        print(f"Error in chat endpoint: {e}")
-        return jsonify({'response': "Sorry, I couldn't process your question right now."}), 500
+if st.button("🚀 Ask AI"):
+    if question.strip():
+        with st.spinner("Thinking..."):
+            try:
+                response = model.generate_content(
+                    f"""
+                    You are SmartLearn AI, a friendly educational assistant.
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+                    Explain the following question clearly and simply.
+                    Use headings, bullet points and examples when useful.
+                    Make the answer easy for college students to understand.
+
+                    Question:
+                    {question}
+                    """
+                )
+
+                st.markdown("### 📚 Answer")
+                st.write(response.text)
+
+            except Exception as e:
+                st.error(f"Error: {e}")
+    else:
+        st.warning("Please enter a question.")

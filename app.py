@@ -8,69 +8,51 @@ st.set_page_config(
     layout="wide"
 )
 
-# -----------------------------
-# ADMIN LOGIN DETAILS
-# -----------------------------
-ADMIN_USERNAME = "your username"
-ADMIN_PASSWORD = "your password"
-ADMIN_NAME = "Swathi"
-
-# -----------------------------
-# LOGIN PAGE
-# -----------------------------
+# Login status
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 
+# ---------------- LOGIN PAGE ----------------
 if not st.session_state.logged_in:
 
     st.title("🎓 SmartLearn AI")
-    st.subheader("🔐 Login to Continue")
+    st.subheader("🔐 Login")
 
-    username = st.text_input("Username")
-    password = st.text_input("Password", type="password")
+    username = st.text_input("Enter Username")
+    password = st.text_input("Enter Password", type="password")
 
     if st.button("Login 🚀"):
 
-        if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+        if username.strip() and password.strip():
+
             st.session_state.logged_in = True
+            st.session_state.username = username
+
             st.rerun()
 
         else:
-            st.error("❌ Invalid username or password")
+            st.error("Please enter Username and Password")
 
     st.stop()
 
 
-# -----------------------------
-# WELCOME PAGE
-# -----------------------------
+# ---------------- WELCOME PAGE ----------------
+
 st.title("🎓 Welcome to SmartLearn AI")
 
-st.success(f"👋 Welcome, {ADMIN_NAME}!")
-
-st.markdown(
-    """
-    ### 📚 Your Personal AI Learning Assistant
-
-    Ask questions, learn concepts and get simple explanations
-    with the power of AI.
-    """
+st.success(
+    f"👋 Welcome, {st.session_state.username}!"
 )
 
-st.divider()
+st.write("Your Personal AI Learning Assistant")
 
-
-# -----------------------------
-# LOGOUT
-# -----------------------------
 if st.sidebar.button("Logout 🔒"):
     st.session_state.logged_in = False
     st.rerun()
 
 
-# -----------------------------
-# GEMINI AI
-# -----------------------------
+# ---------------- GEMINI AI ----------------
+
 api_key = os.getenv("GEMINI_API_KEY")
 
 if not api_key:
@@ -82,9 +64,8 @@ genai.configure(api_key=api_key)
 model = genai.GenerativeModel("gemini-1.5-flash")
 
 
-# -----------------------------
-# AI QUESTION
-# -----------------------------
+# ---------------- ASK AI ----------------
+
 st.subheader("💬 Ask SmartLearn AI")
 
 question = st.text_area(
@@ -102,11 +83,11 @@ if st.button("🚀 Ask AI"):
 
                 response = model.generate_content(
                     f"""
-                    You are SmartLearn AI, a friendly educational assistant.
+                    You are SmartLearn AI,
+                    a friendly educational assistant.
 
-                    Explain the following question clearly and simply.
-                    Use headings, bullet points and examples when useful.
-                    Make the answer easy for college students to understand.
+                    Explain this question clearly
+                    and simply for students.
 
                     Question:
                     {question}
